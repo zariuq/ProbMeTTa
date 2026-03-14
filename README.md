@@ -11,6 +11,7 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 ```metta
 !(import! &self (library lib_import))
 !(git-import! "https://github.com/Habush/ProbMeTTa.git")
+!(import &self (library lib_prob))
 
 ;; Probabilistic facts
 !(:: 0.7 burglary)
@@ -40,6 +41,10 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 ### Bayesian Network
 
 ```metta
+!(import! &self (library lib_import))
+!(git-import! "https://github.com/Habush/ProbMeTTa.git")
+!(import &self (library lib_prob))
+
 ;; Deterministic facts
 !(fact (person john))
 !(fact (person mary))
@@ -70,6 +75,7 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 ```metta
 !(import! &self (library lib_import))
 !(git-import! "https://github.com/Habush/ProbMeTTa.git")
+!(import &self (library lib_prob))
 
 !(:: 0.6 (edge 1 2))
 !(:: 0.1 (edge 1 3))
