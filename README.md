@@ -26,6 +26,8 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 !(?prob alarm)         ;; => 0.58
 ```
 
+You can test the above and other examples [here](https://dev.rejuve.bio/probmetta/)
+
 ## Features
 
 - **Probabilistic facts** (`::`) - `(:: 0.3 earthquake)`
@@ -92,8 +94,6 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 !(?prob (path 1 5))  ;; => 0.25824
 !(?prob (path 1 6))  ;; => 0.21673
 ```
-
-You can test the above and other examples [here](https://dev.rejuve.bio/probmetta/)
 
 ## Future Work
 
