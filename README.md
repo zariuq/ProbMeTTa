@@ -28,13 +28,13 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 
 ## Features
 
-- **Probabilistic facts** (`::`) with lazy grounding via templates
+- **Probabilistic facts** (`::`) - `(:: 0.3 earthquake)`
 - **Deterministic facts** (`fact`) and **rules** (`=>`)
-- **Probabilistic rules** (`::=>`) — desugars to auxiliary probabilistic fact + rule
-- **Annotated disjunctions** (`::ad`, `::adr`) — multi-valued random variables via sequential binary encoding, with implicit null when probabilities don't sum to 1
-- **Negation-as-failure** (`naf`) via two-pass BDD compilation
-- **Marginal queries** (`?prob`) — supports both ground and non-ground goals
-- **Conditional queries** (`?prob-given`) — evidence conditioning with list support and negative evidence
+- **Probabilistic rules** (`::=>`) — `(::=> 0.9 alarm (, earthquake))`
+- **Annotated disjunctions** (`::`) — multi-valued random variables. `(:: (0.5 (color red)), (0.5 (color green)))`
+- **Negation-as-failure** (`naf`) `(::=> 0.2 alarm (, earthquake (naf burglary)))`
+- **Marginal queries** (`?prob`) — `(?prob alarm)`
+- **Conditional queries** (`?prob-given`) — evidence conditioning `P(A|B) = (?prob-give A (B))`
 
 ## Examples
 
@@ -92,6 +92,8 @@ A probabilistic logic programming library for MeTTa implementing ProbLog-style d
 !(?prob (path 1 5))  ;; => 0.25824
 !(?prob (path 1 6))  ;; => 0.21673
 ```
+
+You can test the above and other examples [here](https://dev.rejuve.bio/probmetta/)
 
 ## Future Work
 

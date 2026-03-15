@@ -3,10 +3,10 @@
 
 !(import! &self (library lib_bdd))
 
-; Space for probabilistic facts
-!(bind! &prob-facts (new-space))
-;; Templates: just probability + pattern
-!(bind! &prob-templates (new-space))
+; ; Space for probabilistic facts
+; !(bind! &prob-facts (new-space))
+; ;; Templates: just probability + pattern
+; !(bind! &prob-templates (new-space))
 
 ;; Get-or-create a BDD variable for a ground instance
 (= (prob-id $atom)
