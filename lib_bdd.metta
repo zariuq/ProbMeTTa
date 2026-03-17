@@ -26,11 +26,11 @@
         $lo
         ;Check if node already exists (merging rule)
         (case (once (match &bdd (bdd-node $existing $var $lo $hi) $existing))
-            (($id $id)
-             (Empty 
+            ((Empty
                 (let $id (new-id)
                     (let $_ (add-atom &bdd (bdd-node $id $var $lo $hi))
-                        $id)))))))
+                        $id)))
+             ($id $id)))))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Node accessors ;;
@@ -119,13 +119,13 @@
 !(bind! &apply-cache (new-space))
 (= (apply-bdd $op $f $g)
     (case (once (match &apply-cache (cached $op $f $g $result) $result))
-        (($hit $hit)
-         (Empty 
+        ((Empty
             ; Cache miss - compute and store
             (let $result (apply-bdd-compute $op $f $g)
-                (progn 
+                (progn
                     (add-atom &apply-cache (cached $op $f $g $result))
-                    $result))))))
+                    $result)))
+         ($hit $hit))))
 
 (= (apply-bdd-compute $op $f $g)
     (if (and (is-terminal $f) (is-terminal $g))
@@ -226,22 +226,36 @@
 
 ;; Build a conjunction (AND) of variable BDDs from a list of var IDs
 ;; (bdd-conjunction (1 2 3)) = BDD for x1 ∧ x2 ∧ x3
-(= (bdd-conjunction ()) bdd-1)
-(= (bdd-conjunction ($x . $rest)) 
-    (apply-bdd bdd-and $x (bdd-conjunction $rest)))
+(= (bdd-conjunction $xs)
+    (if (== $xs ())
+        bdd-1
+        (let* (($x (car-atom $xs))
+               ($rest (cdr-atom $xs)))
+            (if (== $rest ())
+                $x
+                (apply-bdd bdd-and $x (bdd-conjunction $rest))))))
+
 ;; Build a disjunction (OR) of BDDs from a list of BDDs
-(= (bdd-disjunction ()) bdd-0)
-(= (bdd-disjunction ($b . $rest))
-   (apply-bdd bdd-or $b (bdd-disjunction $rest)))
+(= (bdd-disjunction $bs)
+    (if (== $bs ())
+        bdd-0
+        (let* (($b (car-atom $bs))
+               ($rest (cdr-atom $bs)))
+            (if (== $rest ())
+                $b
+                (apply-bdd bdd-or $b (bdd-disjunction $rest))))))
 
 ;; Convert DNF (list of clauses) to a single BDD
 ;; Each clause is a list of variable IDs to AND together
 ;; The clauses are OR'd together
 ;; Example: ((1 2) (3)) represents (x1 ∧ x2) ∨ x3
-(= (bdd-from-dnf ()) bdd-0)
-(= (bdd-from-dnf ($clause . $rest))
-    (let $bdd-clause (collapse (bdd-var-node (superpose $clause)))
-        (apply-bdd bdd-or (bdd-conjunction $bdd-clause) (bdd-from-dnf $rest))))
+(= (bdd-from-dnf $dnf)
+    (if (== $dnf ())
+        bdd-0
+        (let* (($clause (car-atom $dnf))
+               ($rest (cdr-atom $dnf))
+               ($bdd-clause (collapse (bdd-var-node (superpose $clause)))))
+            (apply-bdd bdd-or (bdd-conjunction $bdd-clause) (bdd-from-dnf $rest)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Weighted Model Counting (WMC) ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
